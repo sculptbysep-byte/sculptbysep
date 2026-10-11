@@ -102,9 +102,10 @@ var SCULPT_APPLICATION = [
   }
 ];
 
-/* Landing-page variant: the live /transformation page runs four questions
-   then contact details, so name and contact are merged into one final step. */
-var SCULPT_APPLICATION_SHORT = SCULPT_APPLICATION.slice(0, 4).concat([
+/* Landing-page variant: deliberately short for cold ad traffic — two questions
+   then contact details. Uses "Where you're stuck" and "How long", skipping
+   "What's in the way" and "Why now", which the full /apply form still asks. */
+var SCULPT_APPLICATION_SHORT = [SCULPT_APPLICATION[0], SCULPT_APPLICATION[2]].concat([
   {
     label: 'Last step',
     title: 'How to reach you',

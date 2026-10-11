@@ -27,27 +27,35 @@
 
   <section class="hero">
     <div class="rail">
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow">Sydney · Online coaching worldwide</p>
-          <h1>Successful everywhere except the mirror. <em>Get visibly lean in 12 weeks.</em></h1>
-          <p class="lede">Training, nutrition and weekly accountability for men over 35 who lead everywhere else and want their body to catch up.</p>
-          <div class="btns">
-            <a class="btn btn-primary" href="#apply">Apply for coaching</a>
-            <a class="btn btn-ghost" href="#proof">View client transformations</a>
-          </div>
-          <p class="note" style="margin-top:18px">Two-minute application · No payment to apply · No hard sell</p>
-        </div>
+      <div class="herolead center">
+        <p class="eyebrow">Sydney · Online coaching worldwide</p>
+        <h1>Successful everywhere except the mirror. <em>Get visibly lean in 12 weeks.</em></h1>
+        <p class="lede">Training, nutrition and weekly accountability for men over 35 who lead everywhere else and want their body to catch up.</p>
+        <p class="note" style="margin-top:18px">Two-minute application · No payment to apply · No hard sell</p>
+      </div>
 
-        <!-- VSL slot. Drop the embed in here when the video is cut; delete the placeholder div. -->
-        <div>
-          <div class="vsl">
-            <div class="play">▶</div>
-            <div class="lbl">VSL slot — embed goes here</div>
-            <p class="note" style="margin:0;max-width:34ch">Sep's story and why he started online coaching.</p>
+      <!-- The application sits directly under the headline so ad traffic can convert
+           without scrolling. The VSL slot is out for now; its styles stay in
+           styles.css, so putting the video back is a markup change only. -->
+      <div id="apply">
+        <form class="quiz solo" id="quiz" novalidate>
+          <div class="qhead">
+            <span class="qlbl" data-q="label">Question 01</span>
+            <span class="qcount" data-q="count">1 / 3</span>
           </div>
-          <p class="cap">Until the video is live, swap this block for images/sep-hero.webp</p>
-        </div>
+          <h2 class="qq" data-q="title">Where you're stuck</h2>
+          <div class="qbar"><i data-q="bar" style="width:33.3%"></i></div>
+          <p class="qsub" data-q="sub">Pick the one that hits closest to home.</p>
+          <p style="font-weight:600;margin-bottom:16px" data-q="question">What are you struggling with most right now?</p>
+          <div class="opts" data-q="opts"></div>
+          <div class="field" data-q="fields" hidden></div>
+          <div class="qfoot">
+            <span class="qtime">Takes ~30 seconds</span>
+            <button type="button" class="btn btn-ghost" data-q="back" hidden>Back</button>
+            <button type="button" class="btn btn-primary" data-q="next">Continue</button>
+          </div>
+        </form>
+        <p class="cap center" style="margin-top:18px"><a class="btn-text" href="#proof">View client transformations</a></p>
       </div>
     </div>
   </section>
@@ -61,35 +69,7 @@
   </div>
 
   <!-- Application sits high on the page: ad traffic shouldn't have to scroll to convert. -->
-  <section id="apply" class="alt">
-    <div class="rail">
-      <div class="center">
-        <p class="eyebrow">Apply in 60 seconds</p>
-        <h2>Four questions. Then Sep reviews it personally.</h2>
-        <p class="lede" style="margin-top:16px">No payment to apply. No obligation. If it isn't the right fit, you'll be told straight.</p>
-      </div>
-
-      <form class="quiz solo" id="quiz" novalidate style="margin-top:38px">
-        <div class="qhead">
-          <span class="qlbl" data-q="label">Question 01</span>
-          <span class="qcount" data-q="count">1 / 5</span>
-        </div>
-        <h3 class="qq" data-q="title">Where you're stuck</h3>
-        <div class="qbar"><i data-q="bar" style="width:20%"></i></div>
-        <p class="qsub" data-q="sub">Pick the one that hits closest to home.</p>
-        <p style="font-weight:600;margin-bottom:16px" data-q="question">What are you struggling with most right now?</p>
-        <div class="opts" data-q="opts"></div>
-        <div class="field" data-q="fields" hidden></div>
-        <div class="qfoot">
-          <span class="qtime">Takes ~60 seconds</span>
-          <button type="button" class="btn btn-ghost" data-q="back" hidden>Back</button>
-          <button type="button" class="btn btn-primary" data-q="next">Continue</button>
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <section id="proof">
+    <section id="proof">
     <div class="rail">
       <p class="eyebrow">Recent client results</p>
       <h2>Proof, not promises.</h2>
@@ -479,7 +459,7 @@
 <script src="app.js"></script>
 <script src="application.js"></script>
 <script>
-SculptQuiz.mount('#quiz', SCULPT_APPLICATION_SHORT);
+SculptQuiz.mount('#quiz', SCULPT_APPLICATION_SHORT, { autoAdvance: true });
 </script>
 </body>
 </html>

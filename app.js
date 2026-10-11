@@ -13,10 +13,13 @@ window.SculptQuiz = (function () {
   var accessKey = null;
   var notify = 'New coaching application';
 
-  function mount(selector, STEPS) {
+  function mount(selector, STEPS, opts) {
     var form = document.querySelector(selector);
     if (!form || !STEPS || !STEPS.length) return;
 
+    /* autoAdvance: picking an option moves straight to the next question, so
+       there is no Continue button to press on multiple-choice steps. */
+    var autoAdvance = !!(opts && opts.autoAdvance);
     var i = 0, answers = {};
     var el = {
       label: form.querySelector('[data-q="label"]'),
@@ -41,6 +44,7 @@ window.SculptQuiz = (function () {
       el.bar.style.width = (((i + 1) / STEPS.length) * 100).toFixed(1) + '%';
       el.back.hidden = i === 0;
       el.next.textContent = i === STEPS.length - 1 ? 'Submit application' : 'Continue';
+      el.next.hidden = autoAdvance && !!s.opts;
 
       el.opts.innerHTML = '';
       if (s.opts) {
@@ -63,6 +67,15 @@ window.SculptQuiz = (function () {
               c.setAttribute('aria-pressed', 'false');
             });
             b.setAttribute('aria-pressed', 'true');
+
+            if (autoAdvance && i < STEPS.length - 1) {
+              /* Brief pause so the choice registers visually before moving on,
+                 and lock the options so a double tap can't skip a question. */
+              Array.prototype.forEach.call(el.opts.children, function (c) {
+                c.disabled = true;
+              });
+              setTimeout(function () { i++; render(); }, 220);
+            }
           });
           el.opts.appendChild(b);
         });
