@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const ARTICLES = require('./articles.js');
 
-const SITE = 'https://sculptbysep.com';
+const SITE = 'https://www.sculptbysep.com';
 
 const head = (title, description, canonical, extra = '') => `<!doctype html>
 <html lang="en-AU">
