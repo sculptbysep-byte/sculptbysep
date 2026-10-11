@@ -35,8 +35,9 @@ New article: add to articles.js, create content/<slug>.html, run `node build.js`
 2. Have both legal pages reviewed, then remove their `noindex` meta tags
 3. Paste the GTM and Meta Pixel snippets where each page's head comment marks it
    (GTM-5824NQKS, Pixel 1726714848616217)
-4. Set SculptQuiz.endpoint so applications reach an inbox — currently unset, the
-   form completes without sending anywhere
+4. Get a free Web3Forms access key at https://web3forms.com using
+   sculptbysep@gmail.com, and paste it into SculptQuiz.accessKey at the top of
+   application.js. Until that is set, forms complete but send nothing.
 5. Test on the .vercel.app URL before touching DNS. Ads are live on /transformation.
 
 Do not rename blog slugs. They are the live URLs and carry the search rankings.

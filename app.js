@@ -4,11 +4,14 @@
    Steps 2-6 are placeholders pending Sep's real question copy — edit the STEPS
    array on each page, nothing in this file needs to change.
 
-   Lead capture: set SculptQuiz.endpoint to your form endpoint before mount.
-   Submissions POST as JSON. Until it's set, the form completes without sending. */
+   Lead capture runs through Web3Forms, which emails each application straight to
+   Sep. Set the access key once in application.js. Until it is set, the form still
+   completes for the applicant but nothing is sent — check the browser console. */
 
 window.SculptQuiz = (function () {
-  var endpoint = null;
+  var endpoint = 'https://api.web3forms.com/submit';
+  var accessKey = null;
+  var notify = 'New coaching application';
 
   function mount(selector, STEPS) {
     var form = document.querySelector(selector);
@@ -91,17 +94,31 @@ window.SculptQuiz = (function () {
     }
 
     function payload() {
-      var out = {};
+      var out = {}, name = '', email = '';
+
       STEPS.forEach(function (s, n) {
         if (s.fields) {
           s.fields.forEach(function (f) {
-            out[f.label] = (answers[n] && answers[n][f.id]) || '';
+            var v = (answers[n] && answers[n][f.id]) || '';
+            out[f.label] = v;
+            if (/name/i.test(f.label)) name = v;
+            if (/email/i.test(f.label)) email = v;
           });
         } else {
-          out[s.q] = answers[n] || '';
+          /* The question itself becomes the field label, so the email reads as
+             question and answer rather than a list of bare values. */
+          out[s.q] = answers[n] || '(not answered)';
         }
       });
-      out.page = location.pathname;
+
+      out['Submitted from'] = location.pathname;
+      out['Submitted at'] = new Date().toLocaleString('en-AU', { timeZone: 'Australia/Sydney' });
+
+      out.access_key = accessKey;
+      out.from_name = 'SculptBySep website';
+      out.subject = notify + (name ? ' — ' + name : '');
+      if (email) out.replyto = email;
+
       return out;
     }
 
@@ -115,20 +132,41 @@ window.SculptQuiz = (function () {
 
     el.next.addEventListener('click', function () {
       if (i < STEPS.length - 1) { i++; render(); return; }
-      if (endpoint) {
-        el.next.disabled = true;
-        el.next.textContent = 'Sending…';
-        fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify(payload())
-        }).then(finish).catch(function () {
+
+      if (!accessKey) {
+        console.warn('SculptQuiz: no access key set — application not sent. ' +
+          'Set SculptQuiz.accessKey in application.js.');
+        finish();
+        return;
+      }
+
+      el.next.disabled = true;
+      el.next.textContent = 'Sending…';
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload())
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (json) {
+          if (json && json.success === false) throw new Error(json.message || 'rejected');
+          finish();
+        })
+        .catch(function (err) {
+          console.error('SculptQuiz: submission failed', err);
           el.next.disabled = false;
           el.next.textContent = 'Try again';
+          var warn = form.querySelector('[data-q="error"]');
+          if (!warn) {
+            warn = document.createElement('p');
+            warn.setAttribute('data-q', 'error');
+            warn.className = 'qsub';
+            warn.style.color = 'var(--orange)';
+            el.next.parentNode.insertBefore(warn, el.next.parentNode.firstChild);
+          }
+          warn.textContent = "That didn't send. Try again, or email sculptbysep@gmail.com directly.";
         });
-      } else {
-        finish();
-      }
     });
 
     el.back.addEventListener('click', function () { if (i > 0) { i--; render(); } });
@@ -138,7 +176,11 @@ window.SculptQuiz = (function () {
 
   return {
     mount: mount,
+    set accessKey(v) { accessKey = v; },
+    get accessKey() { return accessKey; },
     set endpoint(v) { endpoint = v; },
-    get endpoint() { return endpoint; }
+    get endpoint() { return endpoint; },
+    set notify(v) { notify = v; },
+    get notify() { return notify; }
   };
 })();

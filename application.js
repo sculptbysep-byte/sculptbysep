@@ -2,6 +2,22 @@
    One definition, used by index.html, apply.html and transformation.html.
    Change a question here and it changes on every page. */
 
+/* ---------------------------------------------------------------------------
+   WHERE APPLICATIONS GO
+
+   Applications are emailed by Web3Forms. Get a free access key at
+   https://web3forms.com — enter sculptbysep@gmail.com, they email you the key.
+   Paste it between the quotes below and every form on the site starts working.
+
+   The key is designed to be public, so it is safe in this file and in the repo.
+   It only ever delivers to the address it was issued for — nobody can redirect
+   your applications with it.
+
+   Until it is set, forms complete for the applicant but nothing is sent.
+   --------------------------------------------------------------------------- */
+SculptQuiz.accessKey = '';   // <-- paste your Web3Forms access key here
+SculptQuiz.notify = 'New coaching application';
+
 var SCULPT_APPLICATION = [
   {
     label: 'Question 01',
