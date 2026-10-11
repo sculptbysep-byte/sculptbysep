@@ -15,7 +15,7 @@
 
    Until it is set, forms complete for the applicant but nothing is sent.
    --------------------------------------------------------------------------- */
-SculptQuiz.accessKey = '';   // <-- paste your Web3Forms access key here
+SculptQuiz.accessKey = '5f49d271-ebc2-4acd-a599-34bded5c0e61';
 SculptQuiz.notify = 'New coaching application';
 
 var SCULPT_APPLICATION = [
