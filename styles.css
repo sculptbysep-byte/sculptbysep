@@ -18,6 +18,10 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
+/* The quiz hides elements with the `hidden` attribute, but a class that sets
+   `display` outranks the browser's own [hidden] rule — which left the Back
+   button visible on question 1. This wins over both. */
+[hidden]{display:none!important}
 /* Anchor links must clear the sticky header, or the section heading lands under it. */
 [id]{scroll-margin-top:88px}
 body{
